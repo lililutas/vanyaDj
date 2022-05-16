@@ -1,0 +1,62 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+
+	<div class="container">
+		{% for order in orders %}
+		<div class="order-block" >
+			<div class="row ">
+				<div class="{% if status == 'admins' %} col-md-3 {% else %} col-md-4 {% endif %}">
+					<h2>Номер заказа</h2>
+					<h4>#{{ order.id }}</h4>
+				</div>
+				<div class="{% if status == 'admins' %} col-md-3 {% else %} col-md-4 {% endif %}">
+					<h2>Статус заказа</h2>
+					 {% if status == 'admins' %}
+					<div class="btn-group">
+					  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						{{ order.get_status_display }} <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu">
+						{% if order.status != 'check' %}<li><a href="{% url 'changeStatus' %}?order={{order.id}}&status=check">Проверяется</a></li>{% endif %}
+						{% if order.status != 'indeliver' %}<li><a href="{% url 'changeStatus' %}?order={{order.id}}&status=indeliver">Доставляется</a></li>{% endif %}
+						{% if order.status != 'delivered' %}<li><a href="{% url 'changeStatus' %}?order={{order.id}}&status=delivered">Доставлен</a></li>{% endif %}
+					  </ul>
+					</div>
+					{% else %}
+
+					  {{ order.get_status_display }}
+
+					{% endif %}
+					
+					
+					
+				</div>
+				<div class="{% if status == 'admins' %} col-md-3 {% else %} col-md-4 {% endif %}">
+					<h2>Стоимость заказа</h2>
+					<h4>{{ order.total_price }}$</h4>
+				</div>
+				{% if status == 'admins' %}
+				<div class="{% if status == 'admins' %} col-md-3 {% else %} col-md-4 {% endif %}">
+					<h2>Пользователь</h2>
+					<h4>id {{ order.holder.id }}</h4>
+				</div>
+				{% endif %}
+
+			</div>
+			<div class="row">
+				<div class="{% if status == 'admins' %} col-md-3 {% else %} col-md-4 {% endif %}">
+					<a href="{% url 'orderDetails' orderId=order.id %}" class="btn btn-primary">Подробнее</a>
+				</div>
+				<div class="{% if status == 'admins' %} col-md-3 {% else %} col-md-4 {% endif %}">
+					<a href="{% url 'deleteOrder' %}?order={{order.id}}" class="btn btn-danger">Отменить заказ</a>
+				</div>
+			</div>
+		</div>
+		{% endfor%}
+
+	</div>
+
+{% endblock %}

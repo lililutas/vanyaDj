@@ -1,0 +1,43 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+	<div class="container">
+		<div class="row m-top product-card">
+			<div class="col-md-6">
+				<img class="img" src="{{item.image.url}}" />
+			</div>
+
+			<div class="col-md-6 ">
+				<h2>{{item.name}}</h2>
+				
+				<p class="item_text">{{item.desc}}</p>
+				 
+				<div class="d-flex jc-around price-buttons">
+
+
+
+					<button class="btn disabled">{{item.price}}$</button>
+					
+					{% if item.hasMat %}
+					<div class="btn-group">
+					  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Выбрать размер <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu">
+						<li><a href="{% url 'add_to_cart' %}?product={{ item.id }}&material=redwood">Красное дерево</a></li>
+						<li><a href="{% url 'add_to_cart' %}?product={{ item.id }}&material=dub">Дуб</a></li>
+						<li><a href="{% url 'add_to_cart' %}?product={{ item.id }}&material=elka">Елка</a></li>
+
+					  </ul>
+					</div>
+					{% else %}
+					<a href="{% url 'add_to_cart' %}?product={{ item.id }}&size=none" class="btn btn-success">Добавить в корзину</a>
+					{% endif %}
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
